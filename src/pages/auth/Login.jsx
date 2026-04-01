@@ -74,7 +74,7 @@ const AuthPage = () => {
       return;
     }
 
-    localStorage.setItem("token", data.access);
+    localStorage.setItem("token", data.token);
 localStorage.setItem("role", data.role);
 
 alert("Login successful ✅");
