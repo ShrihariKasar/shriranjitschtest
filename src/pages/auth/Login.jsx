@@ -43,7 +43,7 @@ const AuthPage = () => {
   console.log("SENDING:", { email, password });
 
   try {
-    const res = await fetch("http://northmarkschoolerp.pythonanywhere.com/api/school/login/", {
+    const res = await fetch("https://northmarkschoolerp.pythonanywhere.com/api/school/login/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -128,7 +128,7 @@ const handleSignup = async () => {
   }
 
   try {
-    const res = await fetch("http://northmarkschoolerp.pythonanywhere.com/api/school/create-school/", {
+    const res = await fetch("https://northmarkschoolerp.pythonanywhere.com/api/school/create-school/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
