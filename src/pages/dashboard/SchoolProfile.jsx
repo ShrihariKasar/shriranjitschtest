@@ -119,7 +119,7 @@ const handleSave = async () => {
   src={
     form.logo instanceof File
       ? URL.createObjectURL(form.logo)
-      : form.logo
+      : `https://northmarkschoolerp.pythonanywhere.com${form.logo}`
   }
   alt="logo"
 />
@@ -220,7 +220,7 @@ const handleSave = async () => {
   src={
     form.logo instanceof File
       ? URL.createObjectURL(form.logo)
-      : form.logo
+      : `https://northmarkschoolerp.pythonanywhere.com${form.logo}`
   }
   alt="preview"
 />
