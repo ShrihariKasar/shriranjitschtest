@@ -138,7 +138,7 @@ const handleSignup = async () => {
         password,
 
         // 🔥 EXTRA DATA (for future use)
-        school_name: schoolName,
+        name: schoolName,
         address: address,
         city: city,
         phone: phone,
