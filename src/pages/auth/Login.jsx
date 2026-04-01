@@ -211,7 +211,7 @@ const handleSignup = async () => {
             <i className="fas fa-graduation-cap"></i>
           </div>
 
-          <h3>1</h3>
+          <h3>School Management</h3>
           <p className="sub">
             Login to your account or <span>create new one</span>
           </p>
