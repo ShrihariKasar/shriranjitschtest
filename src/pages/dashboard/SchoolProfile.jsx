@@ -20,7 +20,7 @@ const [form, setForm] = useState({
   useEffect(() => {
     const fetchProfile = async () => {
   try {
-    const res = await fetch("http://northmarkschoolerp.pythonanywhere.com/api/school/profile/", {
+    const res = await fetch("https://northmarkschoolerp.pythonanywhere.com/api/school/profile/", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -74,7 +74,7 @@ const handleSave = async () => {
       formData.append("logo", form.logo);
     }
 
-    const res = await fetch("http://northmarkschoolerp.pythonanywhere.com/api/school/profile/", {
+    const res = await fetch("https://northmarkschoolerp.pythonanywhere.com/api/school/profile/", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
