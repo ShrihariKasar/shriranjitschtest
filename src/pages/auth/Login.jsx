@@ -20,7 +20,7 @@ const AuthPage = () => {
   email: "",
   password: "",
   confirmPassword: "",
-  schoolName: "",
+  name: "",
   address: "",
   city: "",
   phone: "",
@@ -110,7 +110,7 @@ const handleSignup = async () => {
     email,
     password,
     confirmPassword,
-    schoolName,
+    name,
     address,
     city,
     phone,
@@ -138,7 +138,7 @@ const handleSignup = async () => {
         password,
 
         // 🔥 EXTRA DATA (for future use)
-        school_name: schoolName,
+        school_name: name,
         address: address,
         city: city,
         phone: phone,
@@ -160,7 +160,7 @@ const handleSignup = async () => {
       email: "",
       password: "",
       confirmPassword: "",
-      schoolName: "",
+      name: "",
       address: "",
       city: "",
       phone: "",
@@ -284,9 +284,9 @@ const handleSignup = async () => {
   {/* SCHOOL NAME */}
   <input
     placeholder="School Name"
-    value={signupData.schoolName || ""}
+    value={signupData.name || ""}
     onChange={(e) =>
-      setSignupData({ ...signupData, schoolName: e.target.value })
+      setSignupData({ ...signupData, name: e.target.value })
     }
   />
 
