@@ -12,27 +12,58 @@ export default function StaffManagement() {
   const cardRef = useRef();
 
   // LOAD DATA
-  useEffect(() => {
-  const loadStaff = () => {
-    const stored = JSON.parse(localStorage.getItem("staff")) || [];
-    setData([...stored]); // 🔥 force new reference
-  };
-
-  loadStaff();
-
-  // ✅ custom event (main fix)
-  window.addEventListener("staffUpdated", loadStaff);
-
-  return () => {
-    window.removeEventListener("staffUpdated", loadStaff);
-  };
+useEffect(() => {
+  fetchStaff();
 }, []);
+
+const fetchStaff = async () => {
+  try {
+    const res = await fetch(
+      "http://northmarkschoolerp.pythonanywhere.com/api/school/staff/"
+    );
+
+    const result = await res.json();
+
+    // 🔥 map backend → frontend format
+    const formatted = result.map((item, index) => ({
+      id: item.id || index + 1,
+
+      name: item.employee_name,
+      phone: item.mobile_no,
+      role: item.employee_role,
+
+      gender: item.gender,
+      blood: item.blood_group,
+      dob: item.date_of_birth,
+
+      picture: item.picture || "",
+    }));
+
+    setData(formatted);
+  } catch (err) {
+    console.error(err);
+  }
+};
   // DELETE
   const handleDelete = (id) => {
-    const updated = data.filter((item) => item.id !== id);
-    setData(updated);
-    localStorage.setItem("staff", JSON.stringify(updated));
-    window.dispatchEvent(new Event("staffUpdated"));
+    const handleDelete = async (id) => {
+  try {
+    const res = await fetch(
+      `http://northmarkschoolerp.pythonanywhere.com/api/school/staff/delete/${id}/`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (res.ok) {
+      fetchStaff(); // refresh
+    } else {
+      alert("Delete failed");
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
   };
 
   // VIEW (NOW MODAL)
@@ -42,7 +73,7 @@ export default function StaffManagement() {
 
   // EDIT
   const handleEdit = (item) => {
-    localStorage.setItem("editStaff", JSON.stringify(item));
+    navigate(`/staff?id=${item.id}`);
     navigate("/staff");
   };
 

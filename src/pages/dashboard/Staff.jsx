@@ -54,85 +54,68 @@ useEffect(() => {
     setSameAddress(false);
   };
 
-  const handleSubmit = () => {
+const handleSubmit = async () => {
   if (!form.name || !form.phone) {
     alert("Name and Phone are required");
     return;
   }
 
-  const existing = JSON.parse(localStorage.getItem("staff")) || [];
+  try {
+    const payload = {
+      school: 1,
 
-  if (isEdit) {
-    // ✅ UPDATE EXISTING
-    const updated = existing.map((item) =>
-      item.id === form.id ? form : item
-    );
+      employee_name: form.name,
+      mobile_no: form.phone,
+      employee_role: form.role,
+      date_of_joining: form.joiningDate,
+      monthly_salary: form.salary,
+      password: "123456", // default or generate
 
-    localStorage.setItem("staff", JSON.stringify(updated));
-  } else {
-    // ✅ CREATE NEW
-    const newStaff = {
-  id: "STF-" + (existing.length + 1).toString().padStart(5, "0"),
-  ...form,
-  active: isActive, // 🔥 ADD THIS
-};
+      father_name: form.fatherName,
+      national_id: form.nationalId,
+      education: form.education,
+      gender: form.gender,
+      religion: form.religion,
+      blood_group: form.blood,
+      experience: form.experience,
 
-    localStorage.setItem("staff", JSON.stringify([...existing, newStaff]));
-  }
+      email_address: form.email,
+      date_of_birth: form.dob,
 
-  navigate("/staff/list");
-};
+      current_address: form.currentAddress,
+      permanent_address: form.permanentAddress,
 
-  const handleBulkUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+      account_number: form.accountNumber,
+      ifsc_code: form.ifsc,
+      branch_name: form.bank,
 
-    const reader = new FileReader();
-
-    reader.onload = (event) => {
-      const text = event.target.result;
-
-      const rows = text
-        .split("\n")
-        .filter((r) => r.trim() !== "")
-        .map((row) => row.split(","));
-
-      const headers = rows[0];
-
-      const data = rows.slice(1).map((row) => {
-        let obj = {};
-        headers.forEach((h, i) => {
-          obj[h.trim()] = row[i]?.trim();
-        });
-        return obj;
-      });
-
-      const existing = JSON.parse(localStorage.getItem("staff")) || [];
-
-      const formatted = data.map((item, index) => ({
-        id: "STF-" + (existing.length + index + 1).toString().padStart(5, "0"),
-        name: item.name || "",
-        phone: item.phone || "",
-        role: item.role || "",
-        gender: item.gender || "",
-        blood: item.blood || "",
-        dob: item.dob || "",
-        email: item.email || "",
-        experience: item.experience || "",
-        currentAddress: item.currentAddress || "",
-        permanentAddress: item.permanentAddress || "",
-        bank: item.bank || "",
-        accountNumber: item.accountNumber || "",
-        ifsc: item.ifsc || "",
-      }));
-
-      localStorage.setItem("staff", JSON.stringify([...existing, ...formatted]));
-      navigate("/staff/list");
+      is_active: isActive,
     };
 
-    reader.readAsText(file);
-  };
+    const res = await fetch(
+      "http://northmarkschoolerp.pythonanywhere.com/api/school/staff/add/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Staff Added Successfully");
+      navigate("/staff/list");
+    } else {
+      alert("Error: " + JSON.stringify(data));
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Server Error");
+  }
+};
   return (
     <div className="page">
       <DashboardTabs />

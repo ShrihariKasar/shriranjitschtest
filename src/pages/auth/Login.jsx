@@ -64,11 +64,6 @@ const AuthPage = () => {
       alert("Invalid backend response");
       return;
     }
-
-    console.log("PARSED:", data);
-    console.log("EMAIL STATE:", email);
-    console.log("PASSWORD STATE:", password);
-
     if (!res.ok) {
       alert(data.error || data.detail || "Invalid credentials");
       return;
