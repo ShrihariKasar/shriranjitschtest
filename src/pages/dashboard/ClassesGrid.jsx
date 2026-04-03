@@ -6,24 +6,29 @@ export default function ClassesGrid() {
   const navigate = useNavigate();
   const [classes, setClasses] = useState([]);
 
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("classes")) || [];
+useEffect(() => {
+  fetchClasses();
+}, []);
 
-    const formatted = stored
-      .filter((cls) => cls.enabled !== false)
-      .map((cls) => {
-        const enabledSections = Object.entries(cls.sections || {})
-          .filter(([_, val]) => val === true)
-          .map(([key]) => key);
+const fetchClasses = async () => {
+  try {
+    const res = await fetch(
+      "https://northmarkschoolerp.pythonanywhere.com/api/school/classes/"
+    );
 
-        return {
-          ...cls,
-          enabledSections,
-        };
-      });
+    const result = await res.json();
+
+    const formatted = result.map((item) => ({
+      id: item.id,
+      name: item.name,
+      enabledSections: [], // ⚠️ backend not storing sections yet
+    }));
 
     setClasses(formatted);
-  }, []);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <div className="page">
@@ -39,7 +44,7 @@ export default function ClassesGrid() {
             <div className="class-row">
               <div className="class-item">
                 <span className="label">Class</span>
-                <span className="value">{cls.id}</span>
+                <span className="value">{cls.name}</span>
               </div>
 
               <div className="class-item">
