@@ -93,7 +93,7 @@ const handleSubmit = async () => {
     };
 
     const res = await fetch(
-      "http://northmarkschoolerp.pythonanywhere.com/api/school/staff/add/",
+      "https://northmarkschoolerp.pythonanywhere.com/api/school/staff/add/",
       {
         method: "POST",
         headers: {

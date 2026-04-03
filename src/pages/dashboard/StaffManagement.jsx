@@ -19,7 +19,7 @@ useEffect(() => {
 const fetchStaff = async () => {
   try {
     const res = await fetch(
-      "http://northmarkschoolerp.pythonanywhere.com/api/school/staff/"
+      "https://northmarkschoolerp.pythonanywhere.com/api/school/staff/"
     );
 
     const result = await res.json();
@@ -49,7 +49,7 @@ const fetchStaff = async () => {
     const handleDelete = async (id) => {
   try {
     const res = await fetch(
-      `http://northmarkschoolerp.pythonanywhere.com/api/school/staff/delete/${id}/`,
+      `https://northmarkschoolerp.pythonanywhere.com/api/school/staff/delete/${id}/`,
       {
         method: "DELETE",
       }
@@ -97,7 +97,7 @@ const fetchStaff = async () => {
       {/* ADD STAFF */}
       <button
         className="submit-btn"
-        onClick={() => navigate("/admin/staff")}
+        onClick={() => navigate("/staff")}
       >
         + Add Staff
       </button>
