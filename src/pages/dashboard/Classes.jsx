@@ -12,41 +12,34 @@ export default function ManageClasses() {
   const [newSection, setNewSection] = useState("");
   const [deleteId, setDeleteId] = useState(null);
 
-  // ✅ LOAD DATA (RUN FIRST)
-  useEffect(() => {
-    const storedClasses = JSON.parse(localStorage.getItem("classes"));
-    const storedSections = JSON.parse(localStorage.getItem("sections"));
+useEffect(() => {
+  fetchClasses();
+}, []);
 
-    if (storedClasses && storedClasses.length > 0) {
-      setClasses(storedClasses);
-    } else {
-      const initial = [
-        { id: 1, enabled: true, sections: {} },
-        { id: 2, enabled: true, sections: {} },
-      ];
-      setClasses(initial);
-    }
+const fetchClasses = async () => {
+  try {
+    const res = await fetch(
+      "https://northmarkschoolerp.pythonanywhere.com/api/school/classes/"
+    );
 
-    if (storedSections && storedSections.length > 0) {
-      setSections(storedSections);
-    } else {
-      setSections(["A", "B", "C", "D"]);
-    }
+    const result = await res.json();
 
-    setLoaded(true); // ✅ unlock saving
-  }, []);
+    // convert API → UI format
+    const formatted = result.map((item) => ({
+      id: item.id,
+      enabled: true,
+      sections: {}, // backend doesn't store sections yet
+    }));
 
-  // ✅ SAVE ONLY AFTER LOAD
-  useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem("classes", JSON.stringify(classes));
-  }, [classes, loaded]);
+    setClasses(formatted);
 
-  useEffect(() => {
-    if (!loaded) return;
-    localStorage.setItem("sections", JSON.stringify(sections));
-  }, [sections, loaded]);
+    // static sections (until backend supports it)
+    setSections(["A", "B", "C", "D"]);
 
+  } catch (err) {
+    console.error(err);
+  }
+};
   // ✅ TOGGLE SECTION
   const toggleSection = (classId, sec) => {
     setClasses((prev) =>
@@ -64,55 +57,50 @@ export default function ManageClasses() {
     );
   };
 
-  // ✅ ADD SECTION
-  const addSection = () => {
-    if (!newSection.trim()) return;
-
-    const sec = newSection.toUpperCase();
-    if (sections.includes(sec)) return;
-
-    const updatedSections = [...sections, sec];
-    setSections(updatedSections);
-
-    setClasses((prev) =>
-      prev.map((c) => ({
-        ...c,
-        sections: {
-          ...c.sections,
-          [sec]: false,
+const addClass = async () => {
+  try {
+    const res = await fetch(
+      "https://northmarkschoolerp.pythonanywhere.com/api/school/classes/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      }))
+        body: JSON.stringify({
+          name: (classes.length + 1).toString(),
+        }),
+      }
     );
 
-    setNewSection("");
-    setShowPopup(false);
-  };
-
-  // ✅ ADD CLASS (SAFE ID)
-  const addClass = () => {
-    const newId =
-      classes.length > 0
-        ? Math.max(...classes.map((c) => c.id)) + 1
-        : 1;
-
-    const secObj = {};
-    sections.forEach((s) => (secObj[s] = false));
-
-    setClasses([
-      ...classes,
-      {
-        id: newId,
-        enabled: true,
-        sections: secObj,
-      },
-    ]);
-  };
-
+    if (res.ok) {
+      fetchClasses(); // refresh
+    } else {
+      alert("Failed to add class");
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
   // ✅ DELETE CLASS
-  const confirmDelete = () => {
-    setClasses(classes.filter((c) => c.id !== deleteId));
-    setDeleteId(null);
-  };
+const confirmDelete = async () => {
+  try {
+    const res = await fetch(
+      `https://northmarkschoolerp.pythonanywhere.com/api/school/classes/${deleteId}/`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (res.ok) {
+      fetchClasses();
+      setDeleteId(null);
+    } else {
+      alert("Delete failed");
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <div className="page">
