@@ -22,31 +22,30 @@ const fetchStaff = async () => {
       "https://northmarkschoolerp.pythonanywhere.com/api/school/staff/list/"
     );
 
-    const result = await res.json();
+    const text = await res.text(); // 👈 DEBUG
 
-    // 🔥 map backend → frontend format
+    console.log("RAW RESPONSE:", text);
+
+    const result = JSON.parse(text); // convert manually
+
     const formatted = result.map((item, index) => ({
       id: item.id || index + 1,
-
       name: item.employee_name,
       phone: item.mobile_no,
       role: item.employee_role,
-
       gender: item.gender,
       blood: item.blood_group,
       dob: item.date_of_birth,
-
-      picture: item.picture || "",
     }));
 
     setData(formatted);
+
   } catch (err) {
-    console.error(err);
+    console.error("ERROR:", err);
   }
 };
   // DELETE
-  const handleDelete = (id) => {
-    const handleDelete = async (id) => {
+const handleDelete = async (id) => {
   try {
     const res = await fetch(
       `https://northmarkschoolerp.pythonanywhere.com/api/school/staff/delete/${id}/`,
@@ -56,7 +55,7 @@ const fetchStaff = async () => {
     );
 
     if (res.ok) {
-      fetchStaff(); // refresh
+      fetchStaff();
     } else {
       alert("Delete failed");
     }
@@ -64,7 +63,6 @@ const fetchStaff = async () => {
     console.error(err);
   }
 };
-  };
 
   // VIEW (NOW MODAL)
   const handleView = (item) => {
@@ -73,8 +71,7 @@ const fetchStaff = async () => {
 
   // EDIT
   const handleEdit = (item) => {
-    navigate(`/staff?id=${item.id}`);
-    navigate("/staff");
+   navigate(`/staff?id=${item.id}`);
   };
 
   // DOWNLOAD ID CARD
