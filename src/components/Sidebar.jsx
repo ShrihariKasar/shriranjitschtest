@@ -88,7 +88,7 @@ const handleLogout = () => {
             }}
           />
           <p style={{ fontSize: "14px", fontWeight: "500" }}>
-            School Name
+            School By Northmark
           </p>
         </div>
 
