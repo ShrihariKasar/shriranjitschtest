@@ -97,7 +97,7 @@ const fetchStaff = async () => {
       {/* ADD STAFF */}
       <button
         className="submit-btn"
-        onClick={() => navigate("admin/staff")}
+        onClick={() => navigate("/admin/staff")}
       >
         + Add Staff
       </button>
