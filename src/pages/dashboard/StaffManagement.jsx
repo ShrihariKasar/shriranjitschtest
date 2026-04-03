@@ -19,7 +19,7 @@ useEffect(() => {
 const fetchStaff = async () => {
   try {
     const res = await fetch(
-      "https://northmarkschoolerp.pythonanywhere.com/api/school/staff/"
+      "https://northmarkschoolerp.pythonanywhere.com/api/school/staff/list/"
     );
 
     const result = await res.json();
